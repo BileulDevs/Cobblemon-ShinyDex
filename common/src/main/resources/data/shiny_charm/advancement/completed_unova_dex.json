@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:dream_ball"
+    },
+    "title": {
+      "translate": "advancement.silowmons_integrations.completed_unova_dex.title"
+    },
+    "description": {
+      "translate": "advancement.silowmons_integrations.completed_unova_dex.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "shiny_charm:root",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

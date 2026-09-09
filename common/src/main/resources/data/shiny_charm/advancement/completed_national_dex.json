@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:master_ball"
+    },
+    "title": {
+      "translate": "advancement.silowmons_integrations.completed_national_dex.title"
+    },
+    "description": {
+      "translate": "advancement.silowmons_integrations.completed_national_dex.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "shiny_charm:root",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "loot": [
+      "shiny_charm:shiny_charm"
+    ]
+  }
+}

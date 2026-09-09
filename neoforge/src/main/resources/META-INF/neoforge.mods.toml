@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT License"
+
+[[mods]]
+modId = "shinydex"
+version = "${version}"
+displayName = "ShinyDex"
+authors = "Darcosse"
+description = '''
+A mod for Cobblemon that adds Shiny Charm
+'''
+logoFile = "assets/shinydex/icon.png"
+
+[[dependencies.shinydex]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.shinydex]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.182,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.shinydex]]
+modId = "cobblemon"
+type = "required"
+versionRange = "[1.8.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.shinydex]]
+modId = "curios"
+type = "required"
+versionRange = "[9.0.0,)"
+ordering = "AFTER"
+side = "BOTH"

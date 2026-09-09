@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "shinydex",
+  "version": "${version}",
+  "name": "ShinyDex",
+  "description": "A mod for Cobblemon that adds Shiny Charm and commands to help you catch them all",
+  "authors": [
+    "Darcosse"
+  ],
+  "license": "MIT License",
+  "icon": "assets/shinydex/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.darcosse.shinydex.fabric.ShinyDexFabric"
+    ]
+  },
+  "depends": {
+    "minecraft": "1.21.1",
+    "cobblemon": ">=1.8.0",
+    "trinkets": ">=3.10.0"
+  }
+}

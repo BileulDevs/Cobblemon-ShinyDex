@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "shiny_charm:shiny_charm"
+    },
+    "title": {
+      "translate": "advancement.silowmons_integrations.root.title"
+    },
+    "description": {
+      "translate": "advancement.silowmons_integrations.root.description"
+    },
+    "background": "minecraft:textures/block/sand.png",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
