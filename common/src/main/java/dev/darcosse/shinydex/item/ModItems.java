@@ -1,6 +1,6 @@
-package dev.darcosse.shiny_charm.item;
+package dev.darcosse.shinydex.item;
 
-import dev.darcosse.shiny_charm.ShinyCharm;
+import dev.darcosse.shinydex.ShinyCharm;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;

@@ -1,12 +1,12 @@
-package dev.darcosse.shiny_charm.commands;
+package dev.darcosse.shinydex.commands;
 
 import com.cobblemon.mod.common.pokemon.Species;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import dev.darcosse.shiny_charm.config.ConfigManager;
-import dev.darcosse.shiny_charm.utils.PokedexRegionUtils;
+import dev.darcosse.shinydex.config.ConfigManager;
+import dev.darcosse.shinydex.utils.PokedexRegionUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;

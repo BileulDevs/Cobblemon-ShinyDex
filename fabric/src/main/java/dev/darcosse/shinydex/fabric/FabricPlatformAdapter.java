@@ -1,7 +1,7 @@
 package dev.darcosse.shinydex.fabric;
 
-import dev.darcosse.shiny_charm.item.ModItems;
-import dev.darcosse.shiny_charm.platform.PlatformAdapter;
+import dev.darcosse.shinydex.item.ModItems;
+import dev.darcosse.shinydex.platform.PlatformAdapter;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.LivingEntity;

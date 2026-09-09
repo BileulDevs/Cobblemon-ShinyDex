@@ -1,9 +1,9 @@
-package dev.darcosse.shiny_charm.config;
+package dev.darcosse.shinydex.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import dev.darcosse.shiny_charm.platform.Platform;
+import dev.darcosse.shinydex.platform.Platform;
 
 import java.io.File;
 import java.io.FileReader;

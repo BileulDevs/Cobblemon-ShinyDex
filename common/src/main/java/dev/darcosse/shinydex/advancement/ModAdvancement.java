@@ -1,6 +1,6 @@
-package dev.darcosse.shiny_charm.advancement;
+package dev.darcosse.shinydex.advancement;
 
-import dev.darcosse.shiny_charm.ShinyCharm;
+import dev.darcosse.shinydex.ShinyCharm;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;

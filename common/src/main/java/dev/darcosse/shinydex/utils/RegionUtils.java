@@ -1,4 +1,4 @@
-package dev.darcosse.shiny_charm.utils;
+package dev.darcosse.shinydex.utils;
 
 public enum RegionUtils {
     JOHTO,

@@ -1,7 +1,7 @@
 package dev.darcosse.shinydex.neoforge;
 
-import dev.darcosse.shiny_charm.item.ModItems;
-import dev.darcosse.shiny_charm.platform.PlatformAdapter;
+import dev.darcosse.shinydex.item.ModItems;
+import dev.darcosse.shinydex.platform.PlatformAdapter;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.fml.loading.FMLPaths;
 import top.theillusivec4.curios.api.CuriosApi;

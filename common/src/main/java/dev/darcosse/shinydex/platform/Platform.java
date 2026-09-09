@@ -1,4 +1,4 @@
-package dev.darcosse.shiny_charm.platform;
+package dev.darcosse.shinydex.platform;
 
 /**
  * Porte l'adapter fourni par le loader courant.

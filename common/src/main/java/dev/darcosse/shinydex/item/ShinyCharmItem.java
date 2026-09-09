@@ -1,6 +1,6 @@
-package dev.darcosse.shiny_charm.item;
+package dev.darcosse.shinydex.item;
 
-import dev.darcosse.shiny_charm.platform.Platform;
+import dev.darcosse.shinydex.platform.Platform;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 

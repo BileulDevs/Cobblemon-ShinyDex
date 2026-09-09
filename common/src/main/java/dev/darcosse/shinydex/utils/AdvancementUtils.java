@@ -1,4 +1,4 @@
-package dev.darcosse.shiny_charm.utils;
+package dev.darcosse.shinydex.utils;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;

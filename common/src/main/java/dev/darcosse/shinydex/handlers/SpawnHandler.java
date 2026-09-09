@@ -1,10 +1,10 @@
-package dev.darcosse.shiny_charm.handlers;
+package dev.darcosse.shinydex.handlers;
 
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
-import dev.darcosse.shiny_charm.config.ConfigManager;
-import dev.darcosse.shiny_charm.item.ShinyCharmItem;
+import dev.darcosse.shinydex.config.ConfigManager;
+import dev.darcosse.shinydex.item.ShinyCharmItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

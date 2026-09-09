@@ -1,9 +1,9 @@
-package dev.darcosse.shiny_charm.tick;
+package dev.darcosse.shinydex.tick;
 
-import dev.darcosse.shiny_charm.advancement.ModAdvancement;
-import dev.darcosse.shiny_charm.utils.AdvancementUtils;
-import dev.darcosse.shiny_charm.utils.PokedexRegionUtils;
-import dev.darcosse.shiny_charm.utils.RegionUtils;
+import dev.darcosse.shinydex.advancement.ModAdvancement;
+import dev.darcosse.shinydex.utils.AdvancementUtils;
+import dev.darcosse.shinydex.utils.PokedexRegionUtils;
+import dev.darcosse.shinydex.utils.RegionUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

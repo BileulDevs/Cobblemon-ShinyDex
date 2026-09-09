@@ -1,6 +1,6 @@
-package dev.darcosse.shiny_charm.utils;
+package dev.darcosse.shinydex.utils;
 
-import dev.darcosse.shiny_charm.config.ConfigManager;
+import dev.darcosse.shinydex.config.ConfigManager;
 
 import java.util.concurrent.ThreadLocalRandom;
 

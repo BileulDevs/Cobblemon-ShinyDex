@@ -1,11 +1,11 @@
-package dev.darcosse.shiny_charm;
+package dev.darcosse.shinydex;
 
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
-import dev.darcosse.shiny_charm.config.ConfigManager;
-import dev.darcosse.shiny_charm.handlers.SpawnHandler;
-import dev.darcosse.shiny_charm.platform.Platform;
-import dev.darcosse.shiny_charm.platform.PlatformAdapter;
+import dev.darcosse.shinydex.config.ConfigManager;
+import dev.darcosse.shinydex.handlers.SpawnHandler;
+import dev.darcosse.shinydex.platform.Platform;
+import dev.darcosse.shinydex.platform.PlatformAdapter;
 import kotlin.Unit;
 
 /**

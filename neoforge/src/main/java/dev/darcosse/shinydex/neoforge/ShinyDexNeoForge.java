@@ -1,9 +1,9 @@
 package dev.darcosse.shinydex.neoforge;
 
-import dev.darcosse.shiny_charm.ShinyCharm;
-import dev.darcosse.shiny_charm.commands.ShinyCharmCommands;
-import dev.darcosse.shiny_charm.item.ModItems;
-import dev.darcosse.shiny_charm.tick.HandleAdvancement;
+import dev.darcosse.shinydex.ShinyCharm;
+import dev.darcosse.shinydex.commands.ShinyCharmCommands;
+import dev.darcosse.shinydex.item.ModItems;
+import dev.darcosse.shinydex.tick.HandleAdvancement;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;

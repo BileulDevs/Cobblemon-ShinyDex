@@ -1,4 +1,4 @@
-package dev.darcosse.shiny_charm.utils;
+package dev.darcosse.shinydex.utils;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress;

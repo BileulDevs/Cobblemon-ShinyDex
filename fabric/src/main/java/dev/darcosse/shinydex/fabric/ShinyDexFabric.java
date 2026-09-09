@@ -1,9 +1,9 @@
 package dev.darcosse.shinydex.fabric;
 
-import dev.darcosse.shiny_charm.ShinyCharm;
-import dev.darcosse.shiny_charm.commands.ShinyCharmCommands;
-import dev.darcosse.shiny_charm.item.ModItems;
-import dev.darcosse.shiny_charm.tick.HandleAdvancement;
+import dev.darcosse.shinydex.ShinyCharm;
+import dev.darcosse.shinydex.commands.ShinyCharmCommands;
+import dev.darcosse.shinydex.item.ModItems;
+import dev.darcosse.shinydex.tick.HandleAdvancement;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
