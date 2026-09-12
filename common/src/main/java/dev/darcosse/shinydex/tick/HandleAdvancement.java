@@ -9,31 +9,49 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Handler generique pour les advancements.
- * Appele a chaque fin de tick serveur par le module de plateforme.
+ * Grants the Pokedex completion advancements.
+ *
+ * Called by each platform module on every server tick, but the work is throttled
+ * and skipped wherever possible. The previous version scanned all ten regions
+ * for every player twenty times a second: roughly 2000 species resolutions and
+ * 4000 Pokedex lookups per player per tick, to answer a question that changes
+ * once every few hours of play.
  */
-public class HandleAdvancement {
+public final class HandleAdvancement {
+
+    /**
+     * Ticks between two checks. Completing a dex is not time-sensitive, and the
+     * player has to catch something for the answer to change at all.
+     */
+    private static final int CHECK_INTERVAL = 100; // 5 seconds
+
+    private static int tickCounter = 0;
+
+    private HandleAdvancement() {
+    }
 
     public static void checkAdvancements(MinecraftServer server) {
-        server.getPlayerList().getPlayers().forEach(player -> {
-            grantRootAdvancement(player);
-            for (RegionUtils region : RegionUtils.values()) {
-                checkDex(player, region.toString());
-            }
-        });
+        if (++tickCounter < CHECK_INTERVAL) return;
+        tickCounter = 0;
+
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            checkPlayer(server, player);
+        }
     }
 
-    private static void grantRootAdvancement(ServerPlayer player) {
-        AdvancementUtils.grantAdvancement(player, ModAdvancement.ROOT.getAdvancement(player.server));
-    }
+    private static void checkPlayer(MinecraftServer server, ServerPlayer player) {
+        AdvancementUtils.grantAdvancement(player, ModAdvancement.ROOT.getAdvancement(server));
 
-    private static void checkDex(ServerPlayer player, String dex) {
-        PokedexRegionUtils.RegionProgress progress =
-                PokedexRegionUtils.getRegionProgress(player, dex.toLowerCase());
+        for (RegionUtils region : RegionUtils.values()) {
+            AdvancementHolder advancement = ModAdvancement.getAdvancement(server, region.id());
+            if (advancement == null) continue;
 
-        if (progress != null && progress.isCompleted()) {
-            AdvancementHolder advancement = ModAdvancement.getAdvancement(player.server, dex);
-            if (advancement != null) {
+            // The advancement itself is the source of truth, and asking it is
+            // free. Once a region is done it is never recomputed again — which
+            // is the common case for any established player.
+            if (player.getAdvancements().getOrStartProgress(advancement).isDone()) continue;
+
+            if (PokedexRegionUtils.isRegionCompleted(player, region)) {
                 AdvancementUtils.grantAdvancement(player, advancement);
             }
         }

@@ -15,7 +15,7 @@ import kotlin.Unit;
  */
 public final class ShinyCharm {
 
-    public static final String MOD_ID = "shiny_charm";
+    public static final String MOD_ID = "shinydex";
 
     private ShinyCharm() {
     }

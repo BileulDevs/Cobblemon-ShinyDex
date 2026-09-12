@@ -12,9 +12,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import top.theillusivec4.curios.api.CuriosCapability;
 
 @Mod(ShinyDexNeoForge.MOD_ID)
 public class ShinyDexNeoForge {
@@ -40,6 +42,15 @@ public class ShinyDexNeoForge {
 
         ITEMS.register(modEventBus);
         TABS.register(modEventBus);
+
+        // Curios refuses the slot through the ICurio capability, where Trinkets
+        // uses a plain interface. Registering it here gives NeoForge the same
+        // equip-time feedback the Fabric side already has.
+        modEventBus.addListener((RegisterCapabilitiesEvent event) ->
+                event.registerItem(
+                        CuriosCapability.ITEM,
+                        (stack, context) -> new ShinyCharmCurio(stack),
+                        SHINY_CHARM.get()));
 
         ShinyCharm.init(new NeoForgePlatformAdapter());
 

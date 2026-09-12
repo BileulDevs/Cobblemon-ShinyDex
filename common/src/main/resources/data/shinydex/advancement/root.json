@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "shinydex:shiny_charm"
+    },
+    "title": {
+      "translate": "advancement.shinydex.root.title"
+    },
+    "description": {
+      "translate": "advancement.shinydex.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "background": "minecraft:textures/block/sand.png"
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
