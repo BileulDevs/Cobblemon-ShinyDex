@@ -6,6 +6,7 @@ Runs on **Fabric** and **NeoForge**, Minecraft **1.21.1**, Cobblemon **1.8.0**.
 
 Species are read from Cobblemon's *implemented* list, so Pokémon added by datapacks and addons are picked up automatically — no update needed on this side.
 
+[![CurseForge](https://img.shields.io/curseforge/dt/1459880?logo=curseforge&label=Downloads&color=f16436)](https://www.curseforge.com/minecraft/mc-mods/cobblemon-shiny-dex)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green?logo=minecraft)](https://www.minecraft.net)
 [![Fabric](https://img.shields.io/badge/Fabric-supported-dbb37d?logo=fabric)](https://fabricmc.net)
 [![NeoForge](https://img.shields.io/badge/NeoForge-supported-e04e14)](https://neoforged.net)
