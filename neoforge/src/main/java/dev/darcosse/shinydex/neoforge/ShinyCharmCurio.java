@@ -8,7 +8,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 /**
  * The Curios counterpart of ShinyDexTrinket: refuses the slot to a player who
- * has not completed the National Pokedex.
+ * is not entitled to the charm (see ShinyCharmAccess#isEntitled).
  *
  * Convenience only — SpawnHandler is what actually enforces the rule. This
  * exists so the NeoForge side behaves like the Fabric one instead of silently
@@ -18,21 +18,27 @@ public class ShinyCharmCurio implements ICurio {
 
     private final ItemStack stack;
 
+    /** Wraps the stack Curios asks about; one instance per capability query. */
     public ShinyCharmCurio(ItemStack stack) {
         this.stack = stack;
     }
 
+    /** The stack this capability belongs to, as Curios requires. */
     @Override
     public ItemStack getStack() {
         return stack;
     }
 
+    /**
+     * Refuses the slot server-side to players not entitled to the charm under
+     * the current config.
+     */
     @Override
     public boolean canEquip(SlotContext slotContext) {
         // Called often, including while rendering the slot, so it stays a plain
         // check with no side effects.
         if (slotContext.entity() instanceof ServerPlayer player) {
-            return ShinyCharmAccess.hasNationalDex(player);
+            return ShinyCharmAccess.isEntitled(player);
         }
 
         // Client side: show it as equippable rather than flicker. The server

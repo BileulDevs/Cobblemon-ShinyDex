@@ -18,10 +18,5 @@
       "trigger": "minecraft:impossible"
     }
   },
-  "parent": "shinydex:root",
-  "rewards": {
-    "loot": [
-      "shinydex:shiny_charm"
-    ]
-  }
+  "parent": "shinydex:root"
 }

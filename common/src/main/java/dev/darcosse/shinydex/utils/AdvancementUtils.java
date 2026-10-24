@@ -4,8 +4,19 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.server.level.ServerPlayer;
 
-public class AdvancementUtils {
+/**
+ * Small helpers around a player's advancement progress, tolerant of an
+ * advancement whose JSON failed to load (null holder).
+ */
+public final class AdvancementUtils {
 
+    private AdvancementUtils() {
+    }
+
+    /**
+     * Completes every remaining criterion, which triggers the advancement's
+     * toast, chat announcement and rewards exactly as a vanilla grant would.
+     */
     public static void grantAdvancement(ServerPlayer player, AdvancementHolder advancement) {
         if (advancement == null) return;
 
@@ -16,5 +27,14 @@ public class AdvancementUtils {
                 player.getAdvancements().award(advancement, criterion);
             }
         }
+    }
+
+    /**
+     * Whether the player has this advancement. A missing advancement counts as
+     * not done, so a broken datapack fails closed.
+     */
+    public static boolean isDone(ServerPlayer player, AdvancementHolder advancement) {
+        if (advancement == null) return false;
+        return player.getAdvancements().getOrStartProgress(advancement).isDone();
     }
 }

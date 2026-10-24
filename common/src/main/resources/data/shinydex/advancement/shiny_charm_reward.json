@@ -1,0 +1,12 @@
+{
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "loot": [
+      "shinydex:shiny_charm"
+    ]
+  }
+}

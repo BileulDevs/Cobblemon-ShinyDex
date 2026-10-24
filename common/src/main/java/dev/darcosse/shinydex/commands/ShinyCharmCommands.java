@@ -6,10 +6,15 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.darcosse.shinydex.config.ConfigManager;
+import dev.darcosse.shinydex.config.ShinyCharmConfig;
+import dev.darcosse.shinydex.config.UnlockMode;
+import dev.darcosse.shinydex.utils.CharmRequirements;
+import dev.darcosse.shinydex.utils.CharmRequirements.Progress;
 import dev.darcosse.shinydex.utils.DexCache.DexEntry;
 import dev.darcosse.shinydex.utils.PokedexRegionUtils;
 import dev.darcosse.shinydex.utils.PokedexRegionUtils.RegionProgress;
 import dev.darcosse.shinydex.utils.RegionUtils;
+import dev.darcosse.shinydex.utils.ShinyCharmAccess;
 import dev.darcosse.shinydex.utils.TypeColors;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -23,7 +28,13 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
+import java.util.Set;
 
+/**
+ * The /shinydex command tree: Pokedex progress, the missing-species list,
+ * Shiny Charm status and the admin reload. Shared by both loaders, which only
+ * hand over their dispatcher.
+ */
 public final class ShinyCharmCommands {
 
     private static final String ROOT = "shinydex";
@@ -59,6 +70,9 @@ public final class ShinyCharmCommands {
                 .then(Commands.literal("completion")
                         .then(regionArgument()
                                 .executes(ShinyCharmCommands::showCompletion)))
+
+                .then(Commands.literal("charm")
+                        .executes(ShinyCharmCommands::showCharm))
         );
     }
 
@@ -155,8 +169,31 @@ public final class ShinyCharmCommands {
                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(command))));
     }
 
+    /**
+     * A species label for display: the four labels with a config switch are
+     * translated, anything from extraExcludedLabels is shown as written.
+     */
+    private static Component labelName(String label) {
+        return Component.translatableWithFallback("command.shinydex.charm.label." + label, label)
+                .withStyle(ChatFormatting.WHITE);
+    }
+
+    /** The excluded labels as one comma-separated line fragment. */
+    private static Component labelList(Set<String> labels) {
+        MutableComponent list = Component.empty();
+        boolean first = true;
+
+        for (String label : labels) {
+            if (!first) list.append(Component.literal(", ").withStyle(ChatFormatting.DARK_GRAY));
+            list.append(labelName(label));
+            first = false;
+        }
+        return list;
+    }
+
     // ---- subcommands -----------------------------------------------------
 
+    /** /shinydex check: one progress line per region that has implemented species. */
     private static int checkAll(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
 
@@ -180,6 +217,7 @@ public final class ShinyCharmCommands {
         return 1;
     }
 
+    /** /shinydex check &lt;region&gt;: progress, or congratulations, for a single region. */
     private static int checkRegion(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
 
@@ -205,6 +243,7 @@ public final class ShinyCharmCommands {
         return 1;
     }
 
+    /** /shinydex missing &lt;region&gt; [page]: paginated list of species not caught yet. */
     private static int showMissing(CommandContext<CommandSourceStack> context, int page) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
 
@@ -258,6 +297,7 @@ public final class ShinyCharmCommands {
         return 1;
     }
 
+    /** /shinydex completion &lt;region&gt;: implemented, seen, caught, percentage and status. */
     private static int showCompletion(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
 
@@ -286,6 +326,77 @@ public final class ShinyCharmCommands {
         return 1;
     }
 
+    /**
+     * /shinydex charm: whether the charm is enabled and earned, the rules in
+     * force, and the player's progress in each required region under those
+     * rules — which may differ from /shinydex check when categories are
+     * excluded or only sightings are required.
+     */
+    private static int showCharm(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ShinyCharmConfig config = ConfigManager.get();
+
+        player.sendSystemMessage(Component.translatable("command.shinydex.charm.header"));
+
+        if (!config.shinyCharm.enabled) {
+            player.sendSystemMessage(Component.translatable("command.shinydex.charm.disabled"));
+            return 1;
+        }
+
+        boolean unlocked = ShinyCharmAccess.hasUnlocked(player);
+
+        player.sendSystemMessage(Component.translatable(unlocked
+                ? "command.shinydex.charm.status.unlocked"
+                : "command.shinydex.charm.status.locked"));
+
+        if (!config.shinyCharm.requireUnlock) {
+            player.sendSystemMessage(Component.translatable("command.shinydex.charm.no_unlock_needed"));
+        }
+
+        // Once earned, the rules no longer apply to this player: the
+        // entitlement is kept even if the config has been tightened since.
+        if (unlocked) return 1;
+
+        if (!config.unlock.enabled) {
+            player.sendSystemMessage(Component.translatable("command.shinydex.charm.unlock_disabled"));
+            return 1;
+        }
+
+        List<Progress> progress = CharmRequirements.progressOf(player, config.unlock);
+
+        if (progress.isEmpty()) {
+            player.sendSystemMessage(Component.translatable("command.shinydex.charm.no_regions"));
+            return 1;
+        }
+
+        player.sendSystemMessage(Component.translatable(config.unlock.mode == UnlockMode.SEEN
+                ? "command.shinydex.charm.rule.seen"
+                : "command.shinydex.charm.rule.caught"));
+
+        Set<String> excluded = config.unlock.excludedLabels();
+        if (!excluded.isEmpty()) {
+            player.sendSystemMessage(Component.translatable(
+                    "command.shinydex.charm.rule.excluded", labelList(excluded)));
+        }
+
+        // Same line format as /shinydex check, so the two read alike; the
+        // counts here are the charm's, not the full dex's.
+        for (Progress region : progress) {
+            player.sendSystemMessage(Component.translatable(
+                    region.isMet()
+                            ? "command.shinydex.check.line.complete"
+                            : "command.shinydex.check.line.progress",
+                    arg(region.region().displayName(), ChatFormatting.WHITE),
+                    arg(region.met(), ChatFormatting.GRAY),
+                    arg(region.counted(), ChatFormatting.GRAY),
+                    percent(region.percentage(), ChatFormatting.DARK_GRAY)
+            ));
+        }
+
+        return 1;
+    }
+
+    /** /shinydex reload (OP 2): re-reads the config file and reports the new rate. */
     private static int reloadConfig(CommandContext<CommandSourceStack> context) {
         try {
             ConfigManager.reloadConfig();
@@ -304,6 +415,7 @@ public final class ShinyCharmCommands {
         }
     }
 
+    /** /shinydex info: the configured shiny rate, as a ratio and a percentage. */
     private static int showInfo(CommandContext<CommandSourceStack> context) {
         int chance = ConfigManager.getCurrentShinyChance();
         double percentage = (1.0 / chance) * 100.0;

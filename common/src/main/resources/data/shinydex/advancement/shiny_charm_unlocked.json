@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "shinydex:shiny_charm"
+    },
+    "title": {
+      "translate": "advancement.shinydex.shiny_charm_unlocked.title"
+    },
+    "description": {
+      "translate": "advancement.shinydex.shiny_charm_unlocked.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "shinydex:root"
+}

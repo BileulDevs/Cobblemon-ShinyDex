@@ -6,8 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The implemented species of each region, resolved once.
@@ -16,17 +19,20 @@ import java.util.Map;
  * Walking the national dex alone is 1025 of those calls, and the advancement
  * tick did all ten regions for every player, every tick.
  *
- * Only immutable data is kept — number, identifier, name, types — rather than
- * the Species objects themselves, so a Cobblemon reload cannot leave stale
- * references behind. The identifier is what the Pokedex is queried with, and
- * it is stable.
+ * Only immutable data is kept — number, identifier, name, types, labels —
+ * rather than the Species objects themselves, so a Cobblemon reload cannot
+ * leave stale references behind. The identifier is what the Pokedex is
+ * queried with, and it is stable.
  */
 public final class DexCache {
 
     /**
-     * One Pokedex slot, flattened to exactly what this mod displays.
+     * One Pokedex slot, flattened to exactly what this mod displays and
+     * filters on.
      *
      * @param secondaryType null for single-type species
+     * @param labels        Cobblemon's species labels, lowercased, used to
+     *                      leave categories out of the Shiny Charm requirement
      */
     public record DexEntry(
             int number,
@@ -35,8 +41,23 @@ public final class DexCache {
             String name,
             String translationKey,
             String primaryType,
-            String secondaryType
-    ) {}
+            String secondaryType,
+            Set<String> labels
+    ) {
+        /**
+         * Whether this species carries at least one of the given labels.
+         * The empty-set shortcut keeps the default config (nothing excluded)
+         * free of any hashing.
+         */
+        public boolean hasAnyLabel(Set<String> wanted) {
+            if (wanted.isEmpty() || labels.isEmpty()) return false;
+
+            for (String label : wanted) {
+                if (labels.contains(label)) return true;
+            }
+            return false;
+        }
+    }
 
     /**
      * Cobblemon's own translation key for a species name.
@@ -56,8 +77,8 @@ public final class DexCache {
     }
 
     /**
-     * @return the implemented species of this region, in Pokedex order.
-     *         Built on first use, then reused.
+     * The implemented species of a region, in Pokedex order. Built on first
+     * use, then reused.
      */
     public static synchronized List<DexEntry> entriesOf(RegionUtils region) {
         List<DexEntry> cached = CACHE.get(region);
@@ -68,6 +89,10 @@ public final class DexCache {
         return entries;
     }
 
+    /**
+     * Resolves one region's entries: the National Pokedex from Cobblemon's
+     * registry, every other region as a slice of it.
+     */
     private static List<DexEntry> build(RegionUtils region) {
         // The national dex covers everything, so the regional lists are slices
         // of it rather than ten independent scans.
@@ -96,13 +121,36 @@ public final class DexCache {
                     species.getName(),
                     translationKeyOf(species.showdownId().toLowerCase()),
                     typeName(species.getPrimaryType()),
-                    typeName(species.getSecondaryType())
+                    typeName(species.getSecondaryType()),
+                    labelsOf(species)
             ));
         }
 
         return List.copyOf(entries);
     }
 
+    /**
+     * A lowercased, immutable copy of the species' labels.
+     *
+     * Copied rather than referenced: Cobblemon's own set is mutable and
+     * rebuilt on reload, and this cache must not change under the requirement
+     * check. Lowercased because the config side is lowercased too, and a
+     * datapack writing "Legendary" should still match.
+     */
+    private static Set<String> labelsOf(Species species) {
+        // UNVERIFIED API: Species#getLabels() — Kotlin property `labels`.
+        // If this does not compile, this is the one line to adapt.
+        Iterable<String> raw = species.getLabels();
+        if (raw == null) return Set.of();
+
+        Set<String> labels = new HashSet<>();
+        for (String label : raw) {
+            if (label != null) labels.add(label.toLowerCase(Locale.ROOT));
+        }
+        return Set.copyOf(labels);
+    }
+
+    /** Cobblemon's type name, or null for a missing secondary type. */
     private static String typeName(com.cobblemon.mod.common.api.types.ElementalType type) {
         return type == null ? null : type.getName();
     }
